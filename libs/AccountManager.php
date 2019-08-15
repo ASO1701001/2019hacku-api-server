@@ -32,15 +32,14 @@ class AccountManager {
     public static function sign_in($user_id, $password) {
         require_once 'DatabaseManager.php';
         $db = new DatabaseManager();
-        $sql = "SELECT id,password FROM user WHERE user_id = ?, password = ?";
+        $sql = "SELECT id,password FROM user WHERE user_id = ?";
         $pdo = $db -> pdo();
         $stmt = $pdo -> prepare($sql);
         $stmt -> bindValue(1,$user_id,PDO::PARAM_STR);
-        $stmt -> bindValue(2,$password,PDO::PARAM_STR);
         $stmt -> execute();
         $check = $stmt -> fetch();
         //パスワードが正しければidを返す
-        if (password_verify($password, $check['password']) == true){
+        if (password_verify($password, $check['password'])){
             return $check['id'];
         }
     return false;
